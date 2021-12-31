@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
         home: Scaffold(
-          appBar: AppBar( actions: [Icon(Icons.star), Icon(Icons.star)],leading: Icon(Icons.star), title: Text("앱바")),
+          appBar: AppBar( actions: [Icon(Icons.star), Icon(Icons.star)],leading: Icon(Icons.star), title: Text("calorie_manager")),
           body: Container(
             color: Colors.blue,
             child: Column(
@@ -27,9 +27,25 @@ class MyApp extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              ElevatedButton(onPressed: () {}, child: Text('키')),
-                              ElevatedButton(onPressed: () {}, child: Text('몸무게')),
-                              ElevatedButton(onPressed: () {}, child: Text('칼로리')),
+                              Container(
+                                width: 100,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'height'
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: 100,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'weight'
+                                  ),
+                                ),
+                              ),
+                              ElevatedButton(onPressed: () {}, child: Text('계산')),
                             ],
                           ), flex: 1,
                         ),
@@ -47,7 +63,7 @@ class MyApp extends StatelessWidget {
                         ),
                       ],
                     ),
-                    color: Colors.green
+                    color: Colors.white
                   ),flex: 3,
                 ),
                 Flexible(
@@ -56,13 +72,13 @@ class MyApp extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        gage(),
-                        gage(),
-                        gage(),
-                        gage(),
+                        gage('탄수화물'),
+                        gage('단백질'),
+                        gage('지방'),
+                        gage('총 칼로리'),
                       ],
                     ),
-                    color: Colors.red
+                    color: Colors.white
                   ),flex: 7,
                 )
               ],
@@ -87,29 +103,58 @@ class MyApp extends StatelessWidget {
 }
 
 class gage extends StatelessWidget {
+
+  final String name;
+  const gage(this.name, {Key? key,}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          '탄수화물',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1,
+          color: Colors.black
+        )
+      ),
+      child: Row(
+        children: [
+          Flexible(child: Container(
+            margin: EdgeInsets.fromLTRB(5, 5, 0, 5),
+            height: 50,
+              child: ElevatedButton(
+                onPressed: (){},
+                child: Icon(Icons.add_box),
+              )
+          ),flex: 1,
           ),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 5),
-          width: 300,
-          height: 20,
-          child: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            child: LinearProgressIndicator(
-              value: 0.4622,
-              backgroundColor: Colors.grey,
+          Flexible(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(5, 0, 5, 0),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "일일 "+name + " : ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                    height: 30,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: LinearProgressIndicator(
+                        value: 0.4622,
+                        backgroundColor: Colors.grey,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
+            flex: 9,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
