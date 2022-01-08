@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'secondSreen.dart';
 
 class First extends StatefulWidget{
@@ -14,6 +15,24 @@ class FirstScreen extends State<First> {
   int age = 0;
   double func = 0.0;
   int calories = 0;
+  late SharedPreferences _prefs;
+
+  void initState(){
+    super.initState();
+    _loadData();
+  }
+
+  _loadData() async {
+    _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      calories = (_prefs.getInt('toCal') ?? 0);
+    });
+  }
+  void computeCal(double func){
+    calories = ((66 + (13.7 * weight) + (5*height) - (6.8 * age)) * func).round();
+    _prefs.setInt('toCal', calories);
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -84,32 +103,27 @@ class FirstScreen extends State<First> {
                           children: [
                             ElevatedButton(onPressed: () {
                               setState(() {
-                                func = 1.2;
-                                calories = ((66 + (13.7 * weight) + (5*height) - (6.8 * age)) * func).round();
+                                computeCal(1.2);
                               });
                             }, child: Text('거의 없다')),
                             ElevatedButton(onPressed: () {
                               setState(() {
-                                func = 1.375;
-                                calories = ((66 + (13.7 * weight) + (5*height) - (6.8 * age)) * func).round();
+                                computeCal(1.375);
                               });
                             }, child: Text('조금 있다')),
                             ElevatedButton(onPressed: () {
                               setState(() {
-                                func = 1.55;
-                                calories = ((66 + (13.7 * weight) + (5*height) - (6.8 * age)) * func).round();
+                                computeCal(1.55);
                               });
                             }, child: Text('보통')),
                             ElevatedButton(onPressed: () {
                               setState(() {
-                                func = 1.725;
-                                calories = ((66 + (13.7 * weight) + (5*height) - (6.8 * age)) * func).round();
+                                computeCal(1.725);
                               });
                             }, child: Text('꽤 있다')),
                             ElevatedButton(onPressed: () {
                               setState(() {
-                                func = 1.9;
-                                calories = ((66 + (13.7 * weight) + (5*height) - (6.8 * age)) * func).round();
+                                computeCal(1.9);
                               });
                             }, child: Text('아주 많다')),
                           ],
@@ -124,7 +138,7 @@ class FirstScreen extends State<First> {
                               final params = MyArguments(calories);
                               await Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => SecondScreen(params:params)),
+                                MaterialPageRoute(builder: (context) => Second(params:params)),
                               );
                             }, child: Text('계산하기')),
                           ],
